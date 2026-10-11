@@ -52,7 +52,6 @@ In the end, the integration of all of the elements turned out to be very simple 
 
 The classes and their attributes and methods are listed here:
 
-```text
 - `Player`: represents one player in the game.
   - **Attributes**
     - `symbol`: holds the player's mark that will go on the board.
@@ -94,7 +93,6 @@ The classes and their attributes and methods are listed here:
     - `get_winner()`: determines which player won.
     - `winner_message()`: creates the final winner message.
     - `play_game()`: runs the full game and interacts with Rich.
-```
 
 ---
 
