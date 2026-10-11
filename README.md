@@ -52,47 +52,49 @@ In the end, the integration of all of the elements turned out to be very simple 
 
 The classes and their attributes and methods are listed here:
 
-> - `Player`: represents one player in the game.
->   - **Attributes**
->     - `symbol`: holds the player's mark that will go on the board.
->     - `points`: holds the player's score.
->     - `name`: holds the player's display name.
->   - **Methods**
->     - `play_turn()`: chooses a random empty square from an empty space.
->     - `add_point()`: adds one point to the player.
-> - `Board`: represents the tic tac toe board.
->   - **Attributes**
->     - `size`: holds the board size.
->     - `squares`: holds the current board marks.
->     - `empty`: holds the available empty squares.
->   - **Methods**
->     - `show_possibilities()`: finds the empty squares.
->     - `check_row()`: checks for a winning row.
->     - `check_col()`: checks for a winning column.
->     - `check_diag()`: checks for a winning diagonal.
->     - `check_winner()`: checks if a player won. It calls the three previous
->       functions and gives a simpler interface when implementing the game.
->     - `reset()`: clears the board for a new round.
->     - `__str__()`: formats the board for display.
-> - `Game`: controls the whole game flow.
->   - **Attributes**
->     - `board`: holds the game board.
->     - `players`: holds both players.
->     - `console`: is used to interact with Rich.
->     - `max_points`: sets the points needed to win.
->     - `max_rounds`: sets the round limit.
->     - `rounds_played`: is used to determine whether the game must stop.
->   - **Methods**
->     - `enter_full_screen()`: helper used to switch to full screen mode, by printing the correct ANSI escape code.
->     - `leave_full_screen()`: helper used to exit full screen mode, by printing the correct ANSI escape code.
->     - `printc()`: helper used to print centered text with Rich.
->     - `play_round()`: plays one round of the game.
->     - `check_player_points()`: gets the highest player score.
->     - `leaderboard()`: creates a Rich table for the scores.
->     - `game_over_reason()`: explains why the game stopped.
->     - `get_winner()`: determines which player won.
->     - `winner_message()`: creates the final winner message.
->     - `play_game()`: runs the full game and interacts with Rich.
+<kbd>
+- `Player`: represents one player in the game.
+  - **Attributes**
+    - `symbol`: holds the player's mark that will go on the board.
+    - `points`: holds the player's score.
+    - `name`: holds the player's display name.
+  - **Methods**
+    - `play_turn()`: chooses a random empty square from an empty space.
+    - `add_point()`: adds one point to the player.
+- `Board`: represents the tic tac toe board.
+  - **Attributes**
+    - `size`: holds the board size.
+    - `squares`: holds the current board marks.
+    - `empty`: holds the available empty squares.
+  - **Methods**
+    - `show_possibilities()`: finds the empty squares.
+    - `check_row()`: checks for a winning row.
+    - `check_col()`: checks for a winning column.
+    - `check_diag()`: checks for a winning diagonal.
+    - `check_winner()`: checks if a player won. It calls the three previous
+      functions and gives a simpler interface when implementing the game.
+    - `reset()`: clears the board for a new round.
+    - `__str__()`: formats the board for display.
+- `Game`: controls the whole game flow.
+  - **Attributes**
+    - `board`: holds the game board.
+    - `players`: holds both players.
+    - `console`: is used to interact with Rich.
+    - `max_points`: sets the points needed to win.
+    - `max_rounds`: sets the round limit.
+    - `rounds_played`: is used to determine whether the game must stop.
+  - **Methods**
+    - `enter_full_screen()`: helper used to switch to full screen mode, by printing the correct ANSI escape code.
+    - `leave_full_screen()`: helper used to exit full screen mode, by printing the correct ANSI escape code.
+    - `printc()`: helper used to print centered text with Rich.
+    - `play_round()`: plays one round of the game.
+    - `check_player_points()`: gets the highest player score.
+    - `leaderboard()`: creates a Rich table for the scores.
+    - `game_over_reason()`: explains why the game stopped.
+    - `get_winner()`: determines which player won.
+    - `winner_message()`: creates the final winner message.
+    - `play_game()`: runs the full game and interacts with Rich.
+</kbd>
 
 ---
 
