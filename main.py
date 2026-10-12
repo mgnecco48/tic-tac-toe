@@ -3,6 +3,10 @@ import numpy as np
 from time import sleep
 from rich.console import Console
 from rich.table import Table
+from rich.align import Align
+from rich.live import Live
+from rich.spinner import Spinner
+from typing import Literal
 
 
 class Board:
@@ -109,6 +113,7 @@ class Game:
         console: Console,
         max_points: int = 5,
         max_rounds: int = 10,
+        game_mode: Literal["interactive", "auto"] = "auto",
     ) -> None:
         self.board = board
         self.players = [player1, player2]
@@ -116,6 +121,7 @@ class Game:
         self.max_points = max_points
         self.max_rounds = max_rounds
         self.rounds_played = 0
+        self.game_mode = "auto"
 
     # Helpers to manage the rendering:
     def enter_full_screen(self):
@@ -124,8 +130,16 @@ class Game:
     def leave_full_screen(self):
         print("\033[?1049l", end="", flush=True)
 
-    def printc(self, text=""):
+    def printc(self, text: str | Board = ""):
         self.console.print(str(text), justify="center", markup=True)
+
+    def line(self, color="default"):
+        self.console.print("─" * 40, justify="center", style=color)
+
+    def top_padding(self, panel_height):
+        terminal_height = self.console.size.height
+        padding = (terminal_height - panel_height) // 2
+        print("\n" * padding)
 
     # -----
 
@@ -134,33 +148,39 @@ class Game:
             for player in self.players:
                 self.console.clear()
                 round_header = f"Round {self.rounds_played + 1}/{self.max_rounds}"
-                self.console.rule()
+                self.top_padding(21)
+                self.line()
                 self.printc(f"[bold]{round_header}[/bold]")
                 self.printc(f"{player.name}")
-                self.console.rule()
+                self.line()
                 player.play_turn(self.board)
                 self.console.print()
                 self.printc(self.board)
                 self.console.print()
-                self.console.rule()
-                self.console.print(self.leaderboard(), justify="center")
-                self.console.rule()
 
                 if self.board.check_winner(player.symbol):
                     message = f"ROUND WINNER: {player.name}"
-                    self.console.rule(style="red")
-                    self.printc(f"[blink bold]{message}[/blink bold]")
-                    self.console.rule(style="red")
+                    self.line("green bold")
+                    self.console.print("\n")
+                    self.printc(f"[bold]{message}[/bold]")
+                    self.console.print("\n")
+                    self.line("green bold")
                     player.add_point()
-                    sleep(2)
+                    sleep(2.5)
                     return
 
                 if not self.board.show_possibilities():
-                    self.console.rule()
-                    self.printc("[blink bold]WE HAVE A TIE !!![/blink bold]")
-                    self.console.rule()
-                    sleep(2)
+                    self.line("yellow bold")
+                    self.console.print("\n")
+                    self.printc("[bold]WE HAVE A TIE !!![/bold]")
+                    self.console.print("\n")
+                    self.line("yellow bold")
+                    sleep(2.5)
                     return
+
+                self.line()
+                self.console.print(self.leaderboard(), justify="center")
+                self.line()
 
                 sleep(1)
 
@@ -182,9 +202,9 @@ class Game:
 
     def game_over_reason(self) -> str:
         if self.rounds_played == self.max_rounds:
-            message = f"{'You reacehd the max rounds limit!'}\n"
+            message = f"[bold]{'You reached the max rounds limit!'}[/bold]\n"
         elif self.check_player_points() == self.max_points:
-            message = f"{'Maximum number of points reached!!'}\n"
+            message = f"[bold]{'Maximum number of points reached!!'}[/bold]\n"
         else:
             return "Something weird happened"
 
@@ -210,29 +230,39 @@ class Game:
 
     def play_game(self) -> None:
         self.enter_full_screen()
-        self.console.rule()
-        self.printc(f"[bold]{'Welcome to the game !!'}[/bold]")
-        self.console.print(":rocket:", justify="center", emoji=True)
-        self.console.rule()
-        sleep(2)
-
         self.console.clear()
-        with self.console.status("[bold]Starting game...[/bold]"):
+        self.top_padding(1)
+        spinner = Spinner("dots", text="[bold]Starting game...[/bold]")
+        with Live(
+            Align.center(spinner),
+            console=self.console,
+            refresh_per_second=12.5,
+            transient=True,
+        ):
             sleep(2.5)
 
         self.console.clear()
-        self.console.rule()
+        self.top_padding(3)
+        self.line()
+        self.printc(f"[bold]{'Welcome!!!'}[/bold]")
+        self.console.print(":rocket:", justify="center", emoji=True)
+        self.line()
+        sleep(2)
+
+        self.console.clear()
+        self.top_padding(21)
+        self.line()
         self.printc(f"[bold]{'Ready??'}[/bold]")
         self.console.print(":question:", justify="center", emoji=True)
-        self.console.rule()
+        self.line()
         self.console.print()
-        self.console.rule()
+        self.line()
         self.console.print()
         self.printc(self.board)
         self.console.print()
-        self.console.rule()
+        self.line()
         self.console.print("Have Fun !!!", justify="center", style="bold magenta")
-        self.console.rule()
+        self.line()
         sleep(2)
 
         while (
@@ -244,17 +274,20 @@ class Game:
             self.board.reset()
 
         self.console.clear()
-        self.console.rule()
+        self.top_padding(17)
+        self.line()
         self.printc(f"{'End of the game'}")
-        self.console.rule()
+        self.line()
+        self.printc()
         self.printc()
         self.printc(self.game_over_reason())
+        self.printc()
         self.console.print(self.leaderboard(), justify="center")
         self.printc()
-        self.console.rule()
+        self.line()
         self.printc(self.winner_message())
-        self.console.rule()
-        sleep(3)
+        self.line()
+        sleep(5)
         self.leave_full_screen()
 
 
