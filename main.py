@@ -127,6 +127,8 @@ class Game:
     def printc(self, text=""):
         self.console.print(str(text), justify="center", markup=True)
 
+    # -----
+
     def play_round(self) -> None:
         while self.board.show_possibilities():
             for player in self.players:
@@ -267,6 +269,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-# TODO: add a sort of animation to show someone won and have player "Leaderboards"
-# TODO: Add the round number in the UI and move players to a list, then iterate through them so i dont need to repeat the code som much
